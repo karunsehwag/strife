@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package payment;
+
+import "google/protobuf/empty.proto";  // ✅ Import Empty for GenerateTransactionID
+
+// 🔹 Payment Gateway Service
+service PaymentGateway {
+    rpc RegisterClient (ClientInfo) returns (RegisterResponse);
+    rpc AuthenticateClient (UserCredentials) returns (AuthResponse);
+    rpc GenerateTransactionID (google.protobuf.Empty) returns (TransactionResponse);
+    rpc ProcessPayment (PaymentRequest) returns (PaymentResponse);
+    rpc ViewBalance (BalanceRequest) returns (BalanceResponse);
+}
+
+// 🔹 Bank Service for Interbank Transfers with 2PC
+service BankService {
+    rpc InterbankTransfer (BankTransferRequest) returns (BankTransferResponse);
+    rpc PrepareTransaction (PrepareRequest) returns (PrepareResponse); // ✅ Phase 1: Prepare
+    rpc CommitTransaction (CommitRequest) returns (CommitResponse); // ✅ Phase 2: Commit
+    rpc AbortTransaction (AbortRequest) returns (AbortResponse); // ✅ Rollback
+}
+
+// 🔸 Client Registration Request
+message ClientInfo {
+    string username = 1;
+    string password = 2;
+    string bank_name = 3;  // ✅ Ensure bank_name is required
+}
+
+// 🔸 Response for Client Registration
+message RegisterResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// 🔸 User Authentication Request
+message UserCredentials {
+    string username = 1;
+    string password = 2;
+}
+
+// 🔸 Response for Authentication
+message AuthResponse {
+    bool success = 1;
+    string token = 2;
+}
+
+// 🔸 Generate Transaction ID Response
+message TransactionResponse {
+    string transaction_id = 1;
+}
+
+// 🔸 Payment Processing Request
+message PaymentRequest {
+    string sender = 1;
+    string receiver = 2;
+    double amount = 3;
+    string transaction_id = 4;
+}
+
+// 🔸 Payment Response
+message PaymentResponse {
+    bool success = 1;
+    string message = 2;
+    string transaction_id = 3;
+    string receiver = 4;
+    string sender_bank = 5;  // ✅ Include sender bank
+    string receiver_bank = 6; // ✅ Include receiver bank
+}
+
+// 🔸 Interbank Transfer Request
+message BankTransferRequest {
+    string sender = 1;
+    string receiver = 2;
+    double amount = 3;
+    string transaction_id = 4;
+}
+
+// 🔸 Interbank Transfer Response
+message BankTransferResponse {
+    bool success = 1;
+    string message = 2;
+    string transaction_id = 3;
+}
+
+// 🔹 2-Phase Commit Protocol Messages
+
+// ✅ Phase 1: Prepare Request (Check if sender has enough balance)
+message PrepareRequest {
+    string sender = 1;
+    string receiver = 2;
+    double amount = 3;
+    string transaction_id = 4;
+}
+
+// ✅ Phase 1: Prepare Response
+message PrepareResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// ✅ Phase 2: Commit Request
+message CommitRequest {
+    string transaction_id = 1;
+}
+
+// ✅ Phase 2: Commit Response
+message CommitResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// ✅ Abort Transaction Request
+message AbortRequest {
+    string transaction_id = 1;
+}
+
+// ✅ Abort Transaction Response
+message AbortResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// 🔸 Balance Request
+message BalanceRequest {
+    string token = 1; // ✅ Authentication token
+}
+
+// 🔸 Balance Response (Now includes a success flag & message)
+message BalanceResponse {
+    bool success = 1;  // ✅ Added explicit success flag instead of relying on balance=-1
+    double balance = 2;
+    string message = 3; // ✅ Added message field for error handling
+}
+

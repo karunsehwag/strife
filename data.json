@@ -1,0 +1,44 @@
+{
+    "alice": {
+        "password": "password123",
+        "account_no": "12345",
+        "balance": 81.0,
+        "bank_name": "BankA"
+    },
+    "bob": {
+        "password": "password456",
+        "account_no": "67890",
+        "balance": 67.0,
+        "bank_name": "BankA"
+    },
+    "karun": {
+        "password": "password256",
+        "account_no": "123456",
+        "balance": 2039.0,
+        "bank_name": "BankB"
+    },
+    "mine": {
+        "password": "password12",
+        "account_no": "9021398232",
+        "balance": 923.0,
+        "bank_name": "BankB"
+    },
+    "user": {
+        "password": "1234",
+        "account_no": "8214225669",
+        "balance": 102.0,
+        "bank_name": "BankC"
+    },
+    "user1": {
+        "password": "1234",
+        "account_no": "3327355532",
+        "balance": 936.0,
+        "bank_name": "BankC"
+    },
+    "user2": {
+        "password": "1234",
+        "account_no": "7581663918",
+        "balance": 988.0,
+        "bank_name": "BankD"
+    }
+}

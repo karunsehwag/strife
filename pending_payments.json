@@ -1,0 +1,9 @@
+{
+    "bob": [
+        {
+            "receiver": "karun",
+            "amount": 1000.0,
+            "transaction_id": "424641011780816896"
+        }
+    ]
+}
